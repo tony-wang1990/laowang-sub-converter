@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: laowang-sub-converter
+    env: docker
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+    autoDeploy: true

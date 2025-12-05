@@ -1,0 +1,21 @@
+{
+    "$schema": "https://json.schemastore.org/zeabur-project-v1.json",
+    "name": "laowang-sub-converter",
+    "template": "DOCKERFILE",
+    "services": [
+        {
+            "name": "web",
+            "git": {
+                "repo": "tony-wang1990/laowang-sub-converter"
+            },
+            "env": {
+                "NODE_ENV": "production",
+                "PORT": "80"
+            },
+            "ports": [
+                80
+            ],
+            "volumes": []
+        }
+    ]
+}
