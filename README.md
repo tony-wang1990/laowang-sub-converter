@@ -30,7 +30,11 @@
 
 ## 🌐 在线演示
 
-👉 **演示地址**：[https://laowang-sub-conv.vercel.app](https://laowang-sub-conv.vercel.app)
+<p>
+  <a href="https://laowang-sub-conv.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/🔗_点击体验_Demo-laowang--sub--conv.vercel.app-38b2ac?style=for-the-badge" alt="Demo">
+  </a>
+</p>
 
 <table>
   <tr>
@@ -71,8 +75,14 @@ docker-compose up -d
 ### Docker
 
 ```bash
-docker run -d -p 80:80 ghcr.io/tony-wang1990/laowang-sub-converter:main
+docker run -d \
+  -p 8080:80 \
+  --name sub-converter \
+  --restart always \
+  ghcr.io/tony-wang1990/laowang-sub-converter:main
 ```
+
+访问 `http://localhost:8080`
 
 ### 本地开发
 
