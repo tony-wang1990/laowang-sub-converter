@@ -1,91 +1,95 @@
-{
-    "nav": {
-        "home": "Home",
-        "converter": "Converter",
-        "shortlink": "Short Links",
-        "about": "Deploy"
-    },
-    "hero": {
-        "title": "LaoWang Sub-converter",
-        "subtitle": "Professional proxy subscription converter supporting multiple protocols and clients",
-        "start": "Start Converting",
-        "docs": "Documentation"
-    },
-    "converter": {
-        "title": "Subscription Converter",
-        "subtitle": "Enter subscription link, select target client, convert with one click",
-        "inputLabel": "Subscription URL",
-        "inputPlaceholder": "Enter subscription links, supports multiple lines...",
-        "targetClient": "Target Client",
-        "selectClient": "Select Client",
-        "advancedOptions": "Advanced Options",
-        "convert": "Generate",
-        "copy": "Copy Link",
-        "copied": "Copied!",
-        "download": "Download",
-        "qrcode": "QR Code",
-        "reset": "Reset"
-    },
-    "clients": {
-        "clash": "Clash",
-        "clashmeta": "Clash Meta",
-        "surge": "Surge",
-        "quantumultx": "Quantumult X",
-        "shadowrocket": "Shadowrocket",
-        "loon": "Loon",
-        "v2rayn": "V2RayN",
-        "v2rayng": "V2RayNG",
-        "surfboard": "Surfboard",
-        "stash": "Stash",
-        "singbox": "sing-box"
-    },
-    "options": {
-        "emoji": "Add Emoji to Nodes",
-        "udp": "Enable UDP",
-        "skipCert": "Skip Certificate Verification",
-        "sort": "Sort Nodes by Name",
-        "filter": "Node Filter",
-        "filterPlaceholder": "Enter keywords to filter nodes...",
-        "rename": "Node Rename Rules",
-        "renamePlaceholder": "old_name->new_name, one per line"
-    },
-    "shortlink": {
-        "title": "Short Link Manager",
-        "subtitle": "Generate short links for easy sharing",
-        "create": "Create Short Link",
-        "yourLinks": "My Short Links",
-        "noLinks": "No short links yet",
-        "originalUrl": "Original URL",
-        "shortUrl": "Short URL",
-        "clicks": "Clicks",
-        "created": "Created",
-        "delete": "Delete"
-    },
-    "about": {
-        "title": "About LaoWang Sub-converter",
-        "description": "An open-source proxy subscription converter",
-        "features": "Features",
-        "featureList": {
-            "protocols": "Multiple proxy protocols supported",
-            "clients": "10+ client formats supported",
-            "deploy": "Multiple deployment options",
-            "i18n": "Multi-language support"
-        },
-        "deploy": "Deployment Options",
-        "github": "GitHub Repository",
-        "license": "License"
-    },
-    "footer": {
-        "copyright": "© 2024 LaoWang Sub-converter",
-        "github": "GitHub",
-        "docs": "Documentation"
-    },
-    "common": {
-        "loading": "Loading...",
-        "error": "An error occurred",
-        "success": "Success",
-        "confirm": "Confirm",
-        "cancel": "Cancel",
-        "close": "Close"
-    }
+﻿{
+    "nav":  {
+                "home":  "Home",
+                "converter":  "Converter",
+                "shortlink":  "Short Links",
+                "about":  "Deploy"
+            },
+    "hero":  {
+                 "title":  "LaoWang Sub-converter",
+                 "subtitle":  "Professional proxy subscription converter supporting multiple protocols and clients",
+                 "start":  "Start Converting",
+                 "docs":  "Documentation"
+             },
+    "converter":  {
+                      "title":  "Subscription Converter",
+                      "subtitle":  "Enter subscription link, select target client, convert with one click",
+                      "inputLabel":  "Subscription URL",
+                      "inputPlaceholder":  "Enter subscription links, supports multiple lines...",
+                      "targetClient":  "Target Client",
+                      "selectClient":  "Select Client",
+                      "advancedOptions":  "Advanced Options",
+                      "convert":  "Generate",
+                      "copy":  "Copy Link",
+                      "copied":  "Copied!",
+                      "download":  "Download",
+                      "qrcode":  "QR Code",
+                      "reset":  "Reset"
+                  },
+    "clients":  {
+                    "clash":  "Clash",
+                    "clashmeta":  "Clash Meta",
+                    "surge":  "Surge",
+                    "quantumultx":  "Quantumult X",
+                    "shadowrocket":  "Shadowrocket",
+                    "loon":  "Loon",
+                    "v2rayn":  "V2RayN",
+                    "v2rayng":  "V2RayNG",
+                    "surfboard":  "Surfboard",
+                    "stash":  "Stash",
+                    "singbox":  "sing-box"
+                },
+    "options":  {
+                    "emoji":  "Add Emoji to Nodes",
+                    "udp":  "Enable UDP",
+                    "skipCert":  "Skip Certificate Verification",
+                    "sort":  "Sort Nodes by Name",
+                    "filter":  "Node Filter",
+                    "filterPlaceholder":  "Enter keywords to filter nodes...",
+                    "rename":  "Node Rename Rules",
+                    "renamePlaceholder":  "old_name-\u003enew_name, one per line"
+                },
+    "shortlink":  {
+                      "title":  "Short Link Manager",
+                      "subtitle":  "Generate short links for easy sharing",
+                      "create":  "Create Short Link",
+                      "yourLinks":  "My Short Links",
+                      "noLinks":  "No short links yet",
+                      "originalUrl":  "Original URL",
+                      "shortUrl":  "Short URL",
+                      "clicks":  "Clicks",
+                      "created":  "Created",
+                      "delete":  "Delete"
+                  },
+    "about":  {
+                  "title":  "About LaoWang Sub-converter",
+                  "description":  "An open-source proxy subscription converter",
+                  "features":  "Features",
+                  "featureList":  {
+                                      "protocols":  "Multiple proxy protocols supported",
+                                      "clients":  "10+ client formats supported",
+                                      "deploy":  "Multiple deployment options",
+                                      "i18n":  "Multi-language support"
+                                  },
+                  "deploy":  "Deployment Options",
+                  "github":  "GitHub Repository",
+                  "license":  "License",
+                  "deployRecommended":  "Recommended (Full Features)",
+                  "deployRecommendedDesc":  "Includes backend API and persistent storage, supports all features including Short Links.",
+                  "deployLimited":  "Frontend/Demo Only (Limited)",
+                  "deployLimitedDesc":  "Mainly for frontend demonstration. Features requiring storage like Short Links are not persistent."
+              },
+    "footer":  {
+                   "copyright":  "© 2024 LaoWang Sub-converter",
+                   "github":  "GitHub",
+                   "docs":  "Documentation"
+               },
+    "common":  {
+                   "loading":  "Loading...",
+                   "error":  "An error occurred",
+                   "success":  "Success",
+                   "confirm":  "Confirm",
+                   "cancel":  "Cancel",
+                   "close":  "Close"
+               }
 }

@@ -1,91 +1,95 @@
-{
-    "nav": {
-        "home": "首页",
-        "converter": "订阅转换",
-        "shortlink": "短链接",
-        "about": "部署指南"
-    },
-    "hero": {
-        "title": "LaoWang 订阅转换器",
-        "subtitle": "专业的代理订阅转换服务，支持多种协议和客户端",
-        "start": "开始转换",
-        "docs": "使用文档"
-    },
-    "converter": {
-        "title": "订阅转换",
-        "subtitle": "输入订阅链接，选择目标客户端，一键转换",
-        "inputLabel": "订阅链接",
-        "inputPlaceholder": "请输入订阅链接，支持多行输入...",
-        "targetClient": "目标客户端",
-        "selectClient": "选择客户端",
-        "advancedOptions": "高级选项",
-        "convert": "生成订阅",
-        "copy": "复制链接",
-        "copied": "已复制！",
-        "download": "下载配置",
-        "qrcode": "二维码",
-        "reset": "重置"
-    },
-    "clients": {
-        "clash": "Clash",
-        "clashmeta": "Clash Meta",
-        "surge": "Surge",
-        "quantumultx": "Quantumult X",
-        "shadowrocket": "Shadowrocket",
-        "loon": "Loon",
-        "v2rayn": "V2RayN",
-        "v2rayng": "V2RayNG",
-        "surfboard": "Surfboard",
-        "stash": "Stash",
-        "singbox": "sing-box"
-    },
-    "options": {
-        "emoji": "节点添加 Emoji",
-        "udp": "启用 UDP",
-        "skipCert": "跳过证书验证",
-        "sort": "按节点名称排序",
-        "filter": "节点过滤",
-        "filterPlaceholder": "输入关键词过滤节点...",
-        "rename": "节点重命名规则",
-        "renamePlaceholder": "旧名称->新名称，每行一条"
-    },
-    "shortlink": {
-        "title": "短链接管理",
-        "subtitle": "生成短链接，便于分享和管理",
-        "create": "生成短链接",
-        "yourLinks": "我的短链接",
-        "noLinks": "暂无短链接",
-        "originalUrl": "原始链接",
-        "shortUrl": "短链接",
-        "clicks": "访问次数",
-        "created": "创建时间",
-        "delete": "删除"
-    },
-    "about": {
-        "title": "关于 LaoWang Sub-converter",
-        "description": "一个开源的代理订阅转换服务",
-        "features": "功能特性",
-        "featureList": {
-            "protocols": "支持多种代理协议",
-            "clients": "支持 10+ 客户端格式",
-            "deploy": "多种部署方式",
-            "i18n": "多语言支持"
-        },
-        "deploy": "部署方式",
-        "github": "GitHub 仓库",
-        "license": "开源协议"
-    },
-    "footer": {
-        "copyright": "© 2024 LaoWang Sub-converter",
-        "github": "GitHub",
-        "docs": "文档"
-    },
-    "common": {
-        "loading": "加载中...",
-        "error": "发生错误",
-        "success": "操作成功",
-        "confirm": "确认",
-        "cancel": "取消",
-        "close": "关闭"
-    }
+﻿{
+    "nav":  {
+                "home":  "首页",
+                "converter":  "订阅转换",
+                "shortlink":  "短链接",
+                "about":  "部署指南"
+            },
+    "hero":  {
+                 "title":  "LaoWang 订阅转换器",
+                 "subtitle":  "专业的代理订阅转换服务，支持多种协议和客户端",
+                 "start":  "开始转换",
+                 "docs":  "使用文档"
+             },
+    "converter":  {
+                      "title":  "订阅转换",
+                      "subtitle":  "输入订阅链接，选择目标客户端，一键转换",
+                      "inputLabel":  "订阅链接",
+                      "inputPlaceholder":  "请输入订阅链接，支持多行输入...",
+                      "targetClient":  "目标客户端",
+                      "selectClient":  "选择客户端",
+                      "advancedOptions":  "高级选项",
+                      "convert":  "生成订阅",
+                      "copy":  "复制链接",
+                      "copied":  "已复制！",
+                      "download":  "下载配置",
+                      "qrcode":  "二维码",
+                      "reset":  "重置"
+                  },
+    "clients":  {
+                    "clash":  "Clash",
+                    "clashmeta":  "Clash Meta",
+                    "surge":  "Surge",
+                    "quantumultx":  "Quantumult X",
+                    "shadowrocket":  "Shadowrocket",
+                    "loon":  "Loon",
+                    "v2rayn":  "V2RayN",
+                    "v2rayng":  "V2RayNG",
+                    "surfboard":  "Surfboard",
+                    "stash":  "Stash",
+                    "singbox":  "sing-box"
+                },
+    "options":  {
+                    "emoji":  "节点添加 Emoji",
+                    "udp":  "启用 UDP",
+                    "skipCert":  "跳过证书验证",
+                    "sort":  "按节点名称排序",
+                    "filter":  "节点过滤",
+                    "filterPlaceholder":  "输入关键词过滤节点...",
+                    "rename":  "节点重命名规则",
+                    "renamePlaceholder":  "旧名称-\u003e新名称，每行一条"
+                },
+    "shortlink":  {
+                      "title":  "短链接管理",
+                      "subtitle":  "生成短链接，便于分享和管理",
+                      "create":  "生成短链接",
+                      "yourLinks":  "我的短链接",
+                      "noLinks":  "暂无短链接",
+                      "originalUrl":  "原始链接",
+                      "shortUrl":  "短链接",
+                      "clicks":  "访问次数",
+                      "created":  "创建时间",
+                      "delete":  "删除"
+                  },
+    "about":  {
+                  "title":  "关于 LaoWang Sub-converter",
+                  "description":  "一个开源的代理订阅转换服务",
+                  "features":  "功能特性",
+                  "featureList":  {
+                                      "protocols":  "支持多种代理协议",
+                                      "clients":  "支持 10+ 客户端格式",
+                                      "deploy":  "多种部署方式",
+                                      "i18n":  "多语言支持"
+                                  },
+                  "deploy":  "部署方式",
+                  "github":  "GitHub 仓库",
+                  "license":  "开源协议",
+                  "deployRecommended":  "推荐部署 (完整功能)",
+                  "deployRecommendedDesc":  "包含后端 API 和持久化存储，支持短链接等所有功能。",
+                  "deployLimited":  "仅前端/演示 (功能受限)",
+                  "deployLimitedDesc":  "主要用于展示前端界面，短链接等需要存储的功能无法长期使用（因为没有持久化数据库）。"
+              },
+    "footer":  {
+                   "copyright":  "© 2024 LaoWang Sub-converter",
+                   "github":  "GitHub",
+                   "docs":  "文档"
+               },
+    "common":  {
+                   "loading":  "加载中...",
+                   "error":  "发生错误",
+                   "success":  "操作成功",
+                   "confirm":  "确认",
+                   "cancel":  "取消",
+                   "close":  "关闭"
+               }
 }

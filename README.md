@@ -44,40 +44,28 @@
 
 ---
 
-##  VPS 部署 (推荐)
+##  部署指南
 
-如果你拥有一台 VPS，可以使用 Docker Compose 进行一键部署，这将包含完整的前端界面和后端 API服务（支持短链接生成）。
+###  推荐部署 (完整功能)
+> 包含后端 API 和持久化存储，支持短链接等所有功能。
 
-1. **安装 Docker & Docker Compose**
-   - 确保你的 VPS 已安装 Docker 和 Docker Compose。
+| 平台 | 部署按钮/命令 |
+| :--- | :--- |
+| **Docker (VPS)** | \docker-compose up -d\ |
+| **Zeabur** | [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/new) |
+| **Railway** | [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Ftony-wang1990%2Flaowang-sub-converter) |
+| **Render** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/tony-wang1990/laowang-sub-converter) |
+| **Fly.io** | \ly launch\ |
+| **Koyeb** | [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=tony-wang1990/laowang-sub-converter) |
 
-2. **下载代码并启动**
+###  仅前端/演示 (功能受限)
+> 主要用于展示前端界面，**短链接等需要存储的功能无法长期使用**（因为没有持久化数据库）。
 
-   `ash
-   # 克隆项目
-   git clone https://github.com/tony-wang1990/laowang-sub-converter.git
-   cd laowang-sub-converter
-
-   # 启动服务
-   docker-compose up -d
-   `
-
-3. **访问服务**
-   - 访问 http://<你的VPS_IP> 即可使用。
-   - 所有数据文件将保存在本地的 ./data 目录下。
-
----
-
-##  一键部署 (PaaS 平台)
-
-除了 VPS，本项目也支持部署到各大 PaaS 平台。以下是常用平台的快速部署按钮：
-
-| 平台 | 部署按钮 | 说明 |
-| :--- | :--- | :--- |
-| **Vercel** | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnoobnooc%2Fnoobnooc) | 推荐前端托管 |
-| **Netlify** | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/noobnooc/noobnooc) | 备选前端托管 |
-| **Railway** | [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Fnoobnooc%2Fnoobnooc) | 支持全栈部署 (含后端) |
-| **Zeabur** | [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/XXXXXX) | 支持全栈部署 |
+| 平台 | 部署按钮 |
+| :--- | :--- |
+| **Vercel** | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/tony-wang1990/laowang-sub-converter) |
+| **Netlify** | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tony-wang1990/laowang-sub-converter) |
+| **Cloudflare Pages** | [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tony-wang1990/laowang-sub-converter) |
 
 ---
 

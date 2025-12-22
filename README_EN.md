@@ -44,40 +44,28 @@ English | [简体中文](./README.md)
 
 ---
 
-##  VPS Deployment (Recommended)
+##  Deployment Guide
 
-If you have a VPS, you can use Docker Compose for one-click deployment, which includes both the full frontend interface and backend API (supporting short links).
+###  Recommended (Full Features)
+> Includes backend API and persistent storage, supports all features including Short Links.
 
-1. **Install Docker & Docker Compose**
-   - Ensure your VPS has Docker and Docker Compose installed.
+| Platform | Button / Command |
+| :--- | :--- |
+| **Docker (VPS)** | \docker-compose up -d\ |
+| **Zeabur** | [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/new) |
+| **Railway** | [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Ftony-wang1990%2Flaowang-sub-converter) |
+| **Render** | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/tony-wang1990/laowang-sub-converter) |
+| **Fly.io** | \ly launch\ |
+| **Koyeb** | [![Deploy to Koyeb](https://www.koyeb.com/static/images/deploy/button.svg)](https://app.koyeb.com/deploy?type=git&repository=tony-wang1990/laowang-sub-converter) |
 
-2. **Download Code and Start**
-
-   `ash
-   # Clone the project
-   git clone https://github.com/tony-wang1990/laowang-sub-converter.git
-   cd laowang-sub-converter
-
-   # Start services
-   docker-compose up -d
-   `
-
-3. **Access Service**
-   - Visit http://<YOUR_VPS_IP> to get started.
-   - All data files will be saved in the local ./data directory.
-
----
-
-##  One-Click Deployment (PaaS)
-
-Besides VPS, this project also supports deployment to major PaaS platforms. Here are quick deployment buttons:
+###  Frontend/Demo (Limited)
+> Mainly for frontend demonstration. **Features requiring storage like Short Links will not work permanently** (no persistent database).
 
 | Platform | Button |
-|------|----------|
+| :--- | :--- |
 | **Vercel** | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/tony-wang1990/laowang-sub-converter) |
 | **Netlify** | [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/tony-wang1990/laowang-sub-converter) |
-| **Railway** | [![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2Fnoobnooc%2Fnoobnooc) |
-| **Zeabur** | [![Deploy on Zeabur](https://zeabur.com/button.svg)](https://zeabur.com/templates/XXXXXX) |
+| **Cloudflare Pages** | [![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/tony-wang1990/laowang-sub-converter) |
 
 ---
 
