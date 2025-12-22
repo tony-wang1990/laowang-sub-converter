@@ -1,0 +1,335 @@
+﻿<template>
+  <div class="shortlink-page">
+    <div class="container">
+      <div class="page-header">
+        <h1 class="page-title">
+          <span class="text-gradient">{{ $t('shortlink.title') }}</span>
+        </h1>
+        <p class="page-subtitle">{{ $t('shortlink.subtitle') }}</p>
+      </div>
+
+      <div class="shortlink-content">
+        <!-- 鍒涘缓鐭摼鎺?-->
+        <div class="create-form glass-card">
+          <h3>{{ $t('shortlink.create') }}</h3>
+          <div class="form-row">
+            <input 
+              type="text" 
+              class="form-input"
+              v-model="originalUrl"
+              :placeholder="$t('converter.inputPlaceholder')"
+            />
+            <button 
+              class="btn btn-primary" 
+              @click="createShortLink"
+              :disabled="!originalUrl || loading"
+            >
+              {{ loading ? '...' : '馃敆' }}
+            </button>
+          </div>
+
+          <div v-if="newShortLink" class="new-link-result">
+            <span class="label">鐭摼鎺ワ細</span>
+            <input type="text" class="form-input" :value="newShortLink" readonly />
+            <button class="btn btn-secondary" @click="copyNewLink">
+              馃搵
+            </button>
+          </div>
+        </div>
+
+        <!-- 鐭摼鎺ュ垪琛?-->
+        <div class="links-list glass-card">
+          <h3>{{ $t('shortlink.yourLinks') }}</h3>
+          
+          <div v-if="shortLinks.length === 0" class="empty-state">
+            <span class="empty-icon">馃敆</span>
+            <p>{{ $t('shortlink.noLinks') }}</p>
+          </div>
+
+          <div v-else class="links-table">
+            <div class="table-header">
+              <span>{{ $t('shortlink.shortUrl') }}</span>
+              <span>{{ $t('shortlink.originalUrl') }}</span>
+              <span>{{ $t('shortlink.clicks') }}</span>
+              <span>{{ $t('shortlink.created') }}</span>
+              <span></span>
+            </div>
+            
+            <div 
+              v-for="link in shortLinks" 
+              :key="link.id" 
+              class="table-row"
+            >
+              <span class="short-url">{{ link.shortUrl }}</span>
+              <span class="original-url" :title="link.originalUrl">
+                {{ truncateUrl(link.originalUrl) }}
+              </span>
+              <span class="clicks">{{ link.clicks }}</span>
+              <span class="created">{{ formatDate(link.createdAt) }}</span>
+              <span class="actions">
+                <button class="btn-icon" @click="copyLink(link.shortUrl)">馃搵</button>
+                <button class="btn-icon delete" @click="deleteLink(link.id)">馃棏锔?/button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive } from 'vue'
+
+const originalUrl = ref('')
+const newShortLink = ref('')
+const loading = ref(false)
+
+// 妯℃嫙鐭摼鎺ユ暟鎹?
+const shortLinks = reactive([
+  {
+    id: '1',
+    shortUrl: 'https://lw.to/abc123',
+    originalUrl: 'https://example.com/very-long-subscription-url-that-needs-shortening',
+    clicks: 42,
+    createdAt: new Date('2024-01-15')
+  },
+  {
+    id: '2',
+    shortUrl: 'https://lw.to/xyz789',
+    originalUrl: 'https://another-example.com/subscription',
+    clicks: 128,
+    createdAt: new Date('2024-01-10')
+  }
+])
+
+const createShortLink = async () => {
+  if (!originalUrl.value) return
+  
+  loading.value = true
+  
+  try {
+    // 妯℃嫙 API 璋冪敤
+    await new Promise(resolve => setTimeout(resolve, 500))
+    
+    const shortCode = Math.random().toString(36).substring(2, 8)
+    newShortLink.value = `${window.location.origin}/s/${shortCode}`
+    
+    shortLinks.unshift({
+      id: Date.now().toString(),
+      shortUrl: newShortLink.value,
+      originalUrl: originalUrl.value,
+      clicks: 0,
+      createdAt: new Date()
+    })
+    
+    originalUrl.value = ''
+  } finally {
+    loading.value = false
+  }
+}
+
+const copyLink = async (url) => {
+  try {
+    await navigator.clipboard.writeText(url)
+    // 鍙互娣诲姞 toast 鎻愮ず
+  } catch (err) {
+    console.error('Copy failed:', err)
+  }
+}
+
+const copyNewLink = () => copyLink(newShortLink.value)
+
+const deleteLink = (id) => {
+  const index = shortLinks.findIndex(l => l.id === id)
+  if (index > -1) {
+    shortLinks.splice(index, 1)
+  }
+}
+
+const truncateUrl = (url, maxLength = 40) => {
+  if (url.length <= maxLength) return url
+  return url.substring(0, maxLength) + '...'
+}
+
+const formatDate = (date) => {
+  return new Intl.DateTimeFormat('zh-CN', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  }).format(date)
+}
+</script>
+
+<style scoped>
+.shortlink-page {
+  padding-top: 100px;
+  padding-bottom: 4rem;
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: var(--font-size-3xl);
+  margin-bottom: 0.5rem;
+}
+
+.page-subtitle {
+  color: var(--color-text-secondary);
+}
+
+.shortlink-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.create-form,
+.links-list {
+  padding: 2rem;
+}
+
+.create-form h3,
+.links-list h3 {
+  margin-bottom: 1.5rem;
+  font-size: var(--font-size-lg);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-input {
+  flex: 1;
+}
+
+.new-link-result {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgba(0, 212, 255, 0.1);
+  border-radius: var(--radius-md);
+}
+
+.new-link-result .label {
+  color: var(--color-accent-cyan);
+  font-weight: 500;
+}
+
+.new-link-result .form-input {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: var(--color-text-muted);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.links-table {
+  overflow-x: auto;
+}
+
+.table-header,
+.table-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 80px 100px 80px;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: center;
+}
+
+.table-header {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.table-row {
+  border-bottom: 1px solid var(--color-border);
+  transition: background var(--transition-fast);
+}
+
+.table-row:hover {
+  background: rgba(0, 212, 255, 0.05);
+}
+
+.short-url {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent-cyan);
+}
+
+.original-url {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clicks {
+  text-align: center;
+  font-weight: 600;
+}
+
+.created {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-icon {
+  padding: 6px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+}
+
+.btn-icon:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.btn-icon.delete:hover {
+  background: rgba(255, 0, 110, 0.2);
+}
+
+@media (max-width: 768px) {
+  .table-header,
+  .table-row {
+    grid-template-columns: 1fr 60px 60px;
+  }
+
+  .table-header span:nth-child(2),
+  .table-row .original-url,
+  .table-header span:nth-child(4),
+  .table-row .created {
+    display: none;
+  }
+}
+</style>
