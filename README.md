@@ -551,3 +551,7 @@ docker restart laowang-sub-converter
 ## License
 
 [MIT](LICENSE)
+
+## 致谢
+
+感谢开源社区的交流与反馈。本项目在 [LINUX DO](https://linux.do/) 社区分享，欢迎在社区里讨论使用中遇到的问题。
