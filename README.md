@@ -67,6 +67,10 @@
 
 ## 快速部署
 
+### 不支持 Vercel 一键部署
+
+本项目**不支持 Vercel 一键部署**，也没有 `vercel.json` 或 Deploy 按钮。原因：本项目是需要长期运行的 Node.js 服务（订阅转换、合并、节点检测、短链接持久化都需要后端和可写数据目录），Vercel 等静态 / Serverless 托管只能提供前端，无法提供这些后端能力；此前仓库描述中“Vercel 一键部署”的说法有误，请以本文档为准——仓库描述需在 GitHub 网页端删除该说法（不在代码文件内，见 [CHANGELOG](CHANGELOG.md)）。请使用下面的 Docker / 一键脚本方式部署。
+
 ### 系统要求
 
 - Linux 服务器：Ubuntu、Debian、Rocky Linux、AlmaLinux、CentOS 等
@@ -261,6 +265,9 @@ docker compose up -d --force-recreate
 | `PUBLIC_BASE_URL` | 空 | 生成短链接时使用的公网根地址 |
 | `TRUST_PROXY` | `1` | Express 信任的反向代理跳数或规则 |
 | `ALLOW_PRIVATE_SUBSCRIPTION_URLS` | `0` | 是否允许后端访问 localhost、内网 IP 和 `.local` 域名 |
+| `ADMIN_TOKEN` | 空（不设） | 短链接管理口令。设置后，创建 / 列表 / 删除短链接须携带口令（`X-Admin-Token` 请求头或 `?token=` 查询参数）；不设置时保持现状、无鉴权，启动日志会打印警告，见[安全说明](#安全说明) |
+| `RATE_LIMIT_WINDOW_MS` | `60000` | 全局限流窗口，单位毫秒 |
+| `RATE_LIMIT_MAX` | `300` | 每个 IP 在每个窗口内允许的请求数；设为 `0` 表示关闭限流（不推荐用于公网部署） |
 
 默认禁止私有地址可降低公开部署时的 SSRF 风险。仅在可信内网、自用部署且确实需要拉取内网订阅时启用：
 
@@ -391,6 +398,20 @@ GET    /api/rules/presets
 GET    /healthz
 ```
 
+如果设置了 `ADMIN_TOKEN`，创建、列表、删除短链接时须携带口令，二选一：
+
+```http
+X-Admin-Token: <你的 ADMIN_TOKEN>
+```
+
+或
+
+```http
+POST /api/shortlink?token=<你的 ADMIN_TOKEN>
+```
+
+短链接跳转（`GET /s/:code`）始终无需口令，任何人拿到短链接都能打开；单个短链接统计（`GET /api/shortlink/:code/stats`）同样公开。Web 控制台的短链接页提供“管理口令”输入框，口令只保存在浏览器 sessionStorage（关闭标签页即清除），随请求以 `X-Admin-Token` 发送。不要把口令写进公开 URL 分享给他人：`?token=` 会留在浏览器历史和服务器日志里，日常使用请优先用请求头。
+
 ## 本地开发
 
 要求 Node.js `>=20.19.0`。
@@ -506,14 +527,26 @@ sudo chmod 750 /opt/laowang-sub-converter/data
 docker restart laowang-sub-converter
 ```
 
+### 短链接创建 / 列表 / 删除返回 401
+
+服务设置了 `ADMIN_TOKEN`，但请求没有携带口令或口令错误。Web 控制台在短链接页的“管理口令”框中填入正确口令后重试；API 调用则加请求头 `X-Admin-Token: <口令>` 或查询参数 `?token=<口令>`（优先用请求头）。确认口令是否与部署时的 `ADMIN_TOKEN` 一致，改动后需重建容器。
+
+### 请求返回 429 Too Many Requests
+
+触发了全局限流（默认每 IP 每分钟 300 次）。按响应头的 `Retry-After` 秒数稍后再试；自用部署如需放宽，调整环境变量 `RATE_LIMIT_MAX` / `RATE_LIMIT_WINDOW_MS` 后重建容器。
+
 ## 安全说明
 
 - 默认拒绝后端访问 localhost、私有 IP、链路本地地址和保留地址。
 - 每次订阅重定向都会重新执行地址检查。
 - 订阅响应有超时和大小限制。
-- 节点检测限制节点数量、并发数、端口和超时时间。
+- 节点检测限制节点数量、并发数、端口和超时时间：单次检测最多 100 个节点，`timeout` 夹紧到 250–10000 毫秒，`concurrent` 夹紧到 1–10。
+- 全局限流：默认每个 IP 每分钟最多 300 次请求，超限返回 `429` 和 `Retry-After`。计数只保存在内存中，重启后清零；调整见环境变量 `RATE_LIMIT_WINDOW_MS` / `RATE_LIMIT_MAX`。
+- 短链接管理可选鉴权：设置环境变量 `ADMIN_TOKEN` 后，创建、列表、删除短链接必须携带口令（`X-Admin-Token` 请求头或 `?token=` 查询参数，口令比对为等长恒定时间比对）；**未设置 `ADMIN_TOKEN` 时短链接管理无鉴权**，任何人能访问服务就能创建、列出和删除短链接，启动日志会打印警告。只在可信内网或自用时才不设置；一旦公开部署，务必设置足够长的随机口令（例如 `openssl rand -hex 32`），并优先用请求头而不是 URL 参数传递。
 - 容器默认以非 root 用户运行，使用只读根文件系统和 `no-new-privileges`。
 - 这是订阅处理工具，不负责验证节点来源是否合法或可信。请勿处理未知来源的敏感订阅。
+
+发现安全问题请按 [SECURITY.md](SECURITY.md) 的方式私密报告，不要直接公开提 Issue。
 
 ## License
 

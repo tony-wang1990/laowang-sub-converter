@@ -7,6 +7,14 @@ import { assertHostAllowed, fetchSubscriptionContent } from '../utils/subscripti
 
 const router = express.Router()
 
+// Maximum number of nodes tested in a single health check request.
+// Kept at 100 so one request cannot tie up the server dialing hundreds of
+// hosts; callers with larger subscriptions should split them into batches.
+const MAX_NODES_PER_CHECK = 100
+const MIN_TIMEOUT_MS = 250
+const MAX_TIMEOUT_MS = 10000
+const MAX_CONCURRENT = 10
+
 async function testNodeConnection(server, port, timeout = 5000) {
     try {
         await assertHostAllowed(server)
@@ -82,7 +90,7 @@ router.post('/check', async (req, res) => {
             return res.status(400).json({ error: 'Either url, content, or nodes array is required' })
         }
 
-        nodes = nodes.slice(0, 500)
+        nodes = nodes.slice(0, MAX_NODES_PER_CHECK)
 
         if (!nodes.length) {
             return res.json({
@@ -95,8 +103,8 @@ router.post('/check', async (req, res) => {
         }
 
         const results = []
-        const batchSize = Math.min(Math.max(Number(concurrent) || 10, 1), 20)
-        const timeoutMs = Math.min(Math.max(Number(timeout) || 5000, 250), 30000)
+        const batchSize = Math.min(Math.max(Number(concurrent) || 10, 1), MAX_CONCURRENT)
+        const timeoutMs = Math.min(Math.max(Number(timeout) || 5000, MIN_TIMEOUT_MS), MAX_TIMEOUT_MS)
 
         for (let i = 0; i < nodes.length; i += batchSize) {
             const batch = nodes.slice(i, i + batchSize)
@@ -161,7 +169,7 @@ router.get('/ping', async (req, res) => {
     if (!Number.isInteger(targetPort) || targetPort < 1 || targetPort > 65535) {
         return res.status(400).json({ error: 'Port must be between 1 and 65535' })
     }
-    const timeoutMs = Math.min(Math.max(Number(timeout) || 3000, 250), 30000)
+    const timeoutMs = Math.min(Math.max(Number(timeout) || 3000, MIN_TIMEOUT_MS), MAX_TIMEOUT_MS)
     res.json(await testNodeConnection(server, targetPort, timeoutMs))
 })
 

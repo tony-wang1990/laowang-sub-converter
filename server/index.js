@@ -26,6 +26,58 @@ app.use(cors())
 app.use(express.json({ limit: '1mb' }))
 app.use(express.urlencoded({ extended: true, limit: '1mb' }))
 
+// ---------------------------------------------------------------------------
+// Basic global rate limiting (hand-written, no extra dependency).
+//
+// Defaults are deliberately loose so normal self-hosted use is unaffected:
+//   RATE_LIMIT_WINDOW_MS  default 60000  (1 minute window)
+//   RATE_LIMIT_MAX        default 300    (requests per IP per window)
+// Set RATE_LIMIT_MAX=0 to disable the limiter entirely (not recommended for
+// a publicly reachable instance). Counts are kept in memory only, so each
+// process / container restart resets them and limits are per-instance.
+// When the limit is hit the server answers 429 with a Retry-After header.
+// ---------------------------------------------------------------------------
+const rateLimitWindowMs = Math.max(
+    Number(process.env.RATE_LIMIT_WINDOW_MS) || 60000,
+    1000
+)
+// NOTE: parse RATE_LIMIT_MAX explicitly instead of `|| 300`, so that
+// RATE_LIMIT_MAX=0 really disables the limiter instead of falling back.
+const rateLimitMax = process.env.RATE_LIMIT_MAX === undefined || process.env.RATE_LIMIT_MAX === ''
+    ? 300
+    : Math.max(Number(process.env.RATE_LIMIT_MAX) || 0, 0)
+const rateLimitStore = new Map()
+
+function basicRateLimit(req, res, next) {
+    if (!rateLimitMax) return next()
+    const now = Date.now()
+    const key = req.ip || req.socket?.remoteAddress || 'unknown'
+    let entry = rateLimitStore.get(key)
+    if (!entry || now - entry.windowStart >= rateLimitWindowMs) {
+        entry = { windowStart: now, count: 0 }
+        rateLimitStore.set(key, entry)
+    }
+    entry.count += 1
+    if (entry.count > rateLimitMax) {
+        const retryAfter = Math.ceil((entry.windowStart + rateLimitWindowMs - now) / 1000)
+        res.setHeader('Retry-After', String(Math.max(retryAfter, 1)))
+        return res.status(429).json({
+            error: 'Too many requests, please slow down and retry later'
+        })
+    }
+    return next()
+}
+
+// Prune stale entries once per window so the map cannot grow unbounded.
+setInterval(() => {
+    const cutoff = Date.now() - rateLimitWindowMs
+    for (const [key, entry] of rateLimitStore) {
+        if (entry.windowStart < cutoff) rateLimitStore.delete(key)
+    }
+}, rateLimitWindowMs).unref()
+
+app.use(basicRateLimit)
+
 app.use('/api/convert', convertRouter)
 app.use('/api/shortlink', shortlinkRouter)
 app.use('/api/health', healthRouter)
@@ -84,6 +136,13 @@ if (path.resolve(process.argv[1] || '') === path.resolve(__filename)) {
         console.log(`LaoWang Sub-converter server running on port ${PORT}`)
         console.log(`API: http://localhost:${PORT}/api`)
         console.log(`Health: http://localhost:${PORT}/healthz`)
+        console.log(`Rate limit: ${rateLimitMax ? `${rateLimitMax} requests per IP per ${rateLimitWindowMs}ms` : 'disabled (RATE_LIMIT_MAX=0)'}`)
+        if (process.env.ADMIN_TOKEN) {
+            console.log('Short link management: ADMIN_TOKEN is set, create/list/delete require the admin token')
+        } else {
+            console.warn('WARNING: ADMIN_TOKEN is not set, short link create/list/delete are unauthenticated. '
+                + 'Set ADMIN_TOKEN before exposing this service publicly. See README Security section.')
+        }
     })
 }
 

@@ -12,7 +12,34 @@ const DATA_FILE = path.join(
     'shortlinks.json'
 )
 
-router.post('/', (req, res) => {
+// ---------------------------------------------------------------------------
+// Optional admin authentication for short link management.
+//
+// When ADMIN_TOKEN is set, creating, listing and deleting short links
+// require the token, sent either as the `X-Admin-Token` request header or
+// as the `?token=` query parameter. The redirect itself (GET /s/:code) and
+// the public stats endpoint stay unauthenticated: a short link is meant to
+// be shared and followed by anyone.
+// When ADMIN_TOKEN is not set, management stays unauthenticated exactly as
+// before (self-hosted / trusted-network use); the server logs a warning at
+// startup and the README Security section says so. Comparison is
+// constant-time so a wrong token does not leak its length by timing.
+// ---------------------------------------------------------------------------
+function requireAdminToken(req, res, next) {
+    const expected = String(process.env.ADMIN_TOKEN || '')
+    if (!expected) return next()
+    const supplied = String(req.get('X-Admin-Token') || req.query?.token || '')
+    const expectedBuffer = Buffer.from(expected)
+    const suppliedBuffer = Buffer.from(supplied)
+    const matches = suppliedBuffer.length === expectedBuffer.length
+        && crypto.timingSafeEqual(suppliedBuffer, expectedBuffer)
+    if (!matches) {
+        return res.status(401).json({ error: 'Admin token is required for short link management' })
+    }
+    return next()
+}
+
+router.post('/', requireAdminToken, (req, res) => {
     try {
         const originalUrl = normalizeRedirectUrl(req.body?.url)
         const requestedCode = String(req.body?.code || '').trim()
@@ -52,7 +79,7 @@ router.post('/', (req, res) => {
     }
 })
 
-router.get('/list', (req, res) => {
+router.get('/list', requireAdminToken, (req, res) => {
     try {
         const links = Object.entries(readData().links)
             .map(([code, link]) => publicLink(req, code, link))
@@ -63,7 +90,7 @@ router.get('/list', (req, res) => {
     }
 })
 
-router.delete('/:code', (req, res) => {
+router.delete('/:code', requireAdminToken, (req, res) => {
     try {
         const data = readData()
         if (!data.links[req.params.code]) {

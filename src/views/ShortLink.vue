@@ -22,6 +22,10 @@
             <span>自定义短码</span>
             <input class="input mono" v-model="customCode" placeholder="my-profile" />
           </label>
+          <label class="field">
+            <span>管理口令（仅当服务器设置了 ADMIN_TOKEN 时需要）</span>
+            <input class="input mono" v-model="adminToken" type="password" placeholder="留空表示未设置" autocomplete="off" />
+          </label>
         </div>
 
         <div class="actions">
@@ -87,10 +91,20 @@ import { copyText } from '../utils/clipboard.js'
 
 const newUrl = ref('')
 const customCode = ref('')
+const adminToken = ref(sessionStorage.getItem('laowang-admin-token') || '')
 const loading = ref(false)
 const shortLinks = ref([])
 const error = ref('')
 const success = ref('')
+
+// The admin token is kept only in sessionStorage (cleared when the tab
+// closes) and sent as the X-Admin-Token header. It is never persisted to
+// the server or written into any file.
+const adminHeaders = () => {
+  const token = adminToken.value.trim()
+  if (token) sessionStorage.setItem('laowang-admin-token', token)
+  return token ? { 'X-Admin-Token': token } : {}
+}
 
 const createShortLink = async () => {
   loading.value = true
@@ -99,7 +113,7 @@ const createShortLink = async () => {
   try {
     const response = await fetch('/api/shortlink', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...adminHeaders() },
       body: JSON.stringify({ url: newUrl.value.trim(), code: customCode.value.trim() || undefined })
     })
     const data = await response.json()
@@ -118,7 +132,7 @@ const createShortLink = async () => {
 const loadShortLinks = async () => {
   error.value = ''
   try {
-    const response = await fetch('/api/shortlink/list')
+    const response = await fetch('/api/shortlink/list', { headers: { ...adminHeaders() } })
     const data = await response.json()
     if (!response.ok || data.error) throw new Error(apiErrorMessage(data, `加载失败（HTTP ${response.status}）`))
     shortLinks.value = (data.links || []).map(normalizeLink)
@@ -141,7 +155,7 @@ const deleteLink = async (id) => {
   if (!confirm('确定删除这个短链接吗？')) return
   error.value = ''
   try {
-    const response = await fetch(`/api/shortlink/${id}`, { method: 'DELETE' })
+    const response = await fetch(`/api/shortlink/${id}`, { method: 'DELETE', headers: { ...adminHeaders() } })
     const data = await response.json()
     if (!response.ok || data.error) throw new Error(apiErrorMessage(data, `删除失败（HTTP ${response.status}）`))
     shortLinks.value = shortLinks.value.filter(link => link.id !== id)
