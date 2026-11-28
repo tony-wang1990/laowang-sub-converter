@@ -1,0 +1,9 @@
+# 演示订阅 / Demo Subscription
+# 仅供教程演示的假节点（Fake nodes for tutorial demos only）
+# 所有地址均为 demo.example.com，密码均为 demo-password，无真实服务器、无真实凭证。
+# 配套视频：《从零搭一个自己的订阅转换服务》https://www.youtube.com/watch?v=UanWIqW5BHQ
+# 永久链接：https://raw.githubusercontent.com/tony-wang1990/laowang-sub-converter/main/docs/demo-subscription.txt
+ss://YWVzLTI1Ni1jZmI6ZGVtby1wYXNzd29yZA@demo.example.com:8388#Demo-SS-1
+ss://YWVzLTI1Ni1nY206ZGVtby1wYXNzd29yZA@demo.example.com:8389#Demo-SS-2
+vmess://eyJ2IjoiMiIsInBzIjoiRGVtby1WTWVzcy0xIiwiYWRkIjoiZGVtby5leGFtcGxlLmNvbSIsInBvcnQiOiI0NDMiLCJpZCI6IjExMTExMTExLTExMTEtMTExMS0xMTExLTExMTExMTExMTExMSIsImFpZCI6IjAiLCJuZXQiOiJ0Y3AiLCJ0eXBlIjoibm9uZSIsImhvc3QiOiIiLCJwYXRoIjoiIiwidGxzIjoidGxzIn0=
+trojan://ZGVtby1wYXNzd29yZA@demo.example.com:443#Demo-Trojan-1
